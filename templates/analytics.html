@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<section class="stack">
+  <h1>Analytics</h1>
+  <p class="lead">Graphs and charts comparing the banks on rates, monthly EMI and fees, drawn from the same database as the rest of the site.</p>
+
+  <!-- Filters: script.js redraws the charts when these change -->
+  <form id="analytics-form" class="card filters">
+    <div>
+      <label for="a-loan-type">Loan type</label>
+      <select id="a-loan-type">
+        {% for t in LOAN_TYPES %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="a-amount">Loan amount (₹)</label>
+      <input id="a-amount" type="number" min="1" step="1000" value="3000000">
+    </div>
+    <div>
+      <label for="a-tenure">Tenure (months)</label>
+      <input id="a-tenure" type="number" min="1" step="1" value="240">
+    </div>
+  </form>
+
+  <p id="analytics-status" class="muted"></p>
+
+  <!-- Headline numbers for the chosen loan type -->
+  <div class="stat-row">
+    <div class="card stat-tile">
+      <span class="stat-label">Lowest starting rate</span>
+      <strong id="stat-rate">-</strong>
+      <span id="stat-rate-bank" class="muted small"></span>
+    </div>
+    <div class="card stat-tile">
+      <span class="stat-label">Lowest monthly EMI</span>
+      <strong id="stat-emi">-</strong>
+      <span id="stat-emi-bank" class="muted small"></span>
+    </div>
+    <div class="card stat-tile">
+      <span class="stat-label">Average starting rate</span>
+      <strong id="stat-average">-</strong>
+      <span id="stat-count" class="muted small"></span>
+    </div>
+  </div>
+
+  <h2>Rates and EMI for this loan type</h2>
+  <div class="chart-grid">
+    <div class="card chart-card">
+      <h3>Lowest and highest interest rate by bank</h3>
+      <p class="muted small">Percent a year. Every bank quotes a range; your rate depends on your profile.</p>
+      <div class="chart-box"><canvas id="chart-rates" role="img" aria-label="Bar chart of lowest and highest interest rate for each bank"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Monthly EMI by bank</h3>
+      <p class="muted small">At each bank's starting rate, for the amount and tenure above.</p>
+      <div class="chart-box"><canvas id="chart-emi" role="img" aria-label="Bar chart of monthly EMI for each bank"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Where your money goes</h3>
+      <p id="split-note" class="muted small">Principal and interest in the total you repay, at the lowest rate.</p>
+      <div class="chart-box"><canvas id="chart-split" role="img" aria-label="Pie chart of principal and interest in the total repayment"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Monthly EMI by tenure</h3>
+      <p class="muted small">A longer tenure lowers the EMI. Shown at the lowest rate.</p>
+      <div class="chart-box"><canvas id="chart-emi-tenure" role="img" aria-label="Line graph of monthly EMI against tenure in years"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Total interest by tenure</h3>
+      <p class="muted small">But a longer tenure costs more interest overall.</p>
+      <div class="chart-box"><canvas id="chart-interest-tenure" role="img" aria-label="Line graph of total interest against tenure in years"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Processing fee by bank</h3>
+      <p class="muted small">Fee as a percentage of the loan amount.</p>
+      <div class="chart-box"><canvas id="chart-fee" role="img" aria-label="Bar chart of processing fee for each bank"></canvas></div>
+    </div>
+  </div>
+
+  <h2>Across all loan types</h2>
+  <div class="chart-grid">
+    <div class="card chart-card">
+      <h3>Average starting rate by loan type</h3>
+      <p class="muted small">Across all banks, percent a year.</p>
+      <div class="chart-box"><canvas id="chart-by-type" role="img" aria-label="Bar chart of average starting rate for each loan type"></canvas></div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Average starting rate by bank</h3>
+      <p class="muted small">Across all of a bank's loan types, percent a year.</p>
+      <div class="chart-box"><canvas id="chart-by-bank" role="img" aria-label="Bar chart of average starting rate for each bank"></canvas></div>
+    </div>
+  </div>
+
+  <h2>How people use LendEase</h2>
+  <div class="chart-grid">
+    <div class="card chart-card">
+      <h3>Most searched loan types</h3>
+      <p class="muted small">Share of all comparisons run by logged-in users.</p>
+      <div class="chart-box"><canvas id="chart-searches" role="img" aria-label="Pie chart of searches by loan type"></canvas></div>
+      <p id="chart-searches-empty" class="muted" hidden>No searches recorded yet.</p>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Saved offers by bank</h3>
+      <p class="muted small">Which banks' offers users save most.</p>
+      <div class="chart-box"><canvas id="chart-saved" role="img" aria-label="Pie chart of saved offers by bank"></canvas></div>
+      <p id="chart-saved-empty" class="muted" hidden>No offers saved yet.</p>
+    </div>
+  </div>
+
+  <p class="notice">Reference data for comparison only, not live or personalised offers.</p>
+
+  <h2>Download the data</h2>
+  <div class="button-row">
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('export_products') }}">Loan products (CSV)</a>
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('export_rate_history') }}">Rate change history (CSV)</a>
+  </div>
+</section>
+{% endblock %}
+{% block libraries %}
+<!-- Chart.js draws the graphs and pie charts on this page -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+{% endblock %}

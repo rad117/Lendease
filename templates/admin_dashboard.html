@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<section class="stack">
+  <h1>Admin</h1>
+  <div class="card-grid">
+    <div class="card stat"><strong>{{ counts.users }}</strong><span>users</span></div>
+    <div class="card stat"><strong>{{ counts.banks }}</strong><span>banks</span></div>
+    <div class="card stat"><strong>{{ counts.products }}</strong><span>loan products</span></div>
+    <div class="card stat"><strong>{{ counts.saved }}</strong><span>saved offers</span></div>
+  </div>
+  <div class="button-row">
+    <a class="btn btn-primary" href="{{ url_for('admin_products') }}">Manage loan products</a>
+    <a class="btn btn-secondary" href="{{ url_for('admin_banks') }}">Manage banks</a>
+  </div>
+
+  <h2>Recent rate changes</h2>
+  {% if recent %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>When</th><th>Bank</th><th>Product</th><th>Rate range</th><th>Fee</th><th>Note</th><th>By</th></tr>
+        </thead>
+        <tbody>
+          {% for r in recent %}
+            <tr>
+              <td>{{ r.recorded_at.strftime('%d %b %Y') }}</td>
+              <td>{{ r.bank_name }}</td>
+              <td>{{ r.product_name }}</td>
+              <td>{{ r.min_interest_rate }}% to {{ r.max_interest_rate }}%</td>
+              <td>{{ r.processing_fee_percent }}%</td>
+              <td>{{ r.change_note or '' }}</td>
+              <td>{{ r.changed_by or '-' }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No rate changes recorded yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

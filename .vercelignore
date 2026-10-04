@@ -1,0 +1,12 @@
+.venv
+.env
+.git
+.pytest_cache
+.superpowers
+__pycache__
+tests
+docs
+scripts
+requirements-dev.txt
+pytest.ini
+presentation

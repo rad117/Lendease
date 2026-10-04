@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Compare loans{% endblock %}
+{% block content %}
+<section class="stack">
+  <h1>Compare loans</h1>
+  <p class="notice">Reference data only, not a live or personalised offer. Check each bank's website before applying.</p>
+
+  <!-- script.js sends these filters to /api/compare and draws the results below -->
+  <form id="compare-form" class="card filters">
+    <div>
+      <label for="loan_type">Loan type</label>
+      <select id="loan_type" name="loan_type">
+        {% for t in LOAN_TYPES %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="amount">Amount (₹)</label>
+      <input id="amount" name="amount" type="number" min="1" step="1000" placeholder="e.g. 3000000">
+    </div>
+    <div>
+      <label for="tenure">Tenure (months)</label>
+      <input id="tenure" name="tenure" type="number" min="1" step="1" placeholder="e.g. 240">
+    </div>
+    <div>
+      <label for="bank_id">Bank</label>
+      <select id="bank_id" name="bank_id">
+        <option value="">All banks</option>
+        {% for b in banks %}<option value="{{ b.bank_id }}">{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="max_rate">Max starting rate (%)</label>
+      <input id="max_rate" name="max_rate" type="number" min="0" step="0.05" placeholder="e.g. 9.5">
+    </div>
+    <div class="filters-submit">
+      <button class="btn btn-primary" type="submit">Compare</button>
+    </div>
+  </form>
+
+  <div class="results-bar">
+    <p id="compare-status" class="muted"></p>
+    <label class="sort">Sort by
+      <select id="sort">
+        <option value="rate">Lowest rate</option>
+        <option value="emi">Lowest EMI</option>
+        <option value="fee">Lowest fee</option>
+      </select>
+    </label>
+  </div>
+  <div id="compare-results" class="results"></div>
+</section>
+{% endblock %}

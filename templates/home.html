@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Compare loans from top Indian banks{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-copy">
+    <h1>Find the loan that costs you least.</h1>
+    <p class="lead">Compare interest rates, fees and tenures from major Indian banks, see what your EMI would be, and save the offers worth a closer look.</p>
+    <div class="button-row">
+      <a class="btn btn-primary" href="{{ url_for('compare') }}">Compare loans</a>
+      <a class="btn btn-secondary" href="{{ url_for('emi_calculator') }}">Open the EMI calculator</a>
+    </div>
+    {% if banks %}
+      <p class="muted">Covering {% for b in banks %}{{ b.short_name }}{{ ', ' if not loop.last }}{% endfor %}.</p>
+    {% endif %}
+  </div>
+
+  <!-- Quick EMI estimate: script.js updates the numbers as the sliders move -->
+  <form id="emi-form" class="emi-panel">
+    <h2>Try a quick estimate</h2>
+    <p class="emi-figure"><span id="out-emi">-</span> <small>a month</small></p>
+
+    <label for="principal">Loan amount <span id="principal-value"></span></label>
+    <input id="principal" type="range" min="100000" max="20000000" step="50000" value="3000000">
+
+    <label for="rate">Interest rate <span id="rate-value"></span></label>
+    <input id="rate" type="range" min="6" max="24" step="0.05" value="8.5">
+
+    <label for="tenure">Tenure <span id="tenure-value"></span></label>
+    <input id="tenure" type="range" min="1" max="30" step="1" value="20">
+
+    <div class="split-bar"><span id="bar-principal"></span><span id="bar-interest"></span></div>
+    <div class="emi-totals">
+      <div>Principal<strong id="out-principal">-</strong></div>
+      <div>Interest<strong id="out-interest">-</strong></div>
+      <div>Total payable<strong id="out-total">-</strong></div>
+    </div>
+    <p class="small">An estimate only. Real offers depend on your profile and the bank's current terms.</p>
+  </form>
+</section>
+
+<section class="section">
+  <h2>Start with a loan type</h2>
+  <ul class="type-list">
+    {% for t in LOAN_TYPES %}
+      {% set s = type_stats.get(t) %}
+      <li>
+        <a href="{{ url_for('compare', loan_type=t) }}">
+          <span class="type-name">{{ t }}</span>
+          <span class="muted">{% if s %}{{ s.bank_count }} banks{% else %}Compare banks{% endif %}</span>
+          <span class="type-rate">{% if s %}from {{ s.from_rate }}%{% endif %}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="section">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><strong>Choose</strong><span>Pick a loan type, then enter the amount and tenure you need.</span></li>
+    <li><strong>Compare</strong><span>See banks ranked by starting rate, with the EMI each one implies.</span></li>
+    <li><strong>Save and verify</strong><span>Keep the best offers on your dashboard, then confirm terms on the bank's site.</span></li>
+  </ol>
+</section>
+
+<section class="section">
+  <p class="notice"><strong>LendEase is not a lender.</strong> {{ DISCLAIMER }}</p>
+</section>
+{% endblock %}

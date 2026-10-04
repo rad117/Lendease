@@ -1,0 +1,790 @@
+/* LendEase styles. Plain CSS, no framework. */
+
+/* ---------- Colours and sizes ---------- */
+:root {
+  --navy: #0a2342;
+  --navy-light: #e4ebf5;
+  --teal: #087268;
+  --teal-bright: #5eead4;
+  --saffron: #f2a33a;
+  --saffron-light: #fdf0d8;
+  --red: #b7351f;
+  --green: #1c7a3d;
+
+  --bg: #f3f6fa;
+  --white: #ffffff;
+  --text: #13202f;
+  --muted: #566377;
+  --border: #d9e1eb;
+
+  --heading-font: "Bricolage Grotesque", "Segoe UI", sans-serif;
+  --body-font: "DM Sans", "Segoe UI", sans-serif;
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body-font);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1, h2, h3 {
+  font-family: var(--heading-font);
+  color: var(--navy);
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; }
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--teal);
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+main.container {
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+/* Vertical spacing between the children of a block */
+.stack > * + * {
+  margin-top: 1rem;
+}
+
+.stack > h2 {
+  margin-top: 2.5rem;
+}
+
+.section {
+  margin-top: 4rem;
+}
+
+.narrow { max-width: 440px; margin: 0 auto; }
+.narrow-wide { max-width: 760px; margin: 0 auto; }
+.center { text-align: center; }
+.muted { color: var(--muted); }
+.small { font-size: 0.875rem; }
+.eyebrow { color: var(--teal); font-weight: 600; }
+.lead { font-size: 1.15rem; color: var(--muted); max-width: 52ch; }
+
+/* ---------- Header ---------- */
+.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.brand {
+  font-family: var(--heading-font);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.brand span {
+  color: var(--teal);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: var(--teal);
+}
+
+.nav-toggle {
+  display: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.inline-form {
+  display: inline;
+  margin: 0;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+}
+
+.disclaimer {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.95rem;
+  font-size: 0.875rem;
+}
+
+.btn-primary { background: var(--teal); color: var(--white); }
+.btn-primary:hover { background: var(--navy); }
+
+.btn-secondary { background: var(--white); color: var(--navy); border-color: #b4c1d3; }
+.btn-secondary:hover { border-color: var(--navy); }
+
+.btn-ghost { background: transparent; color: var(--navy); border-color: var(--border); }
+.btn-ghost:hover { background: var(--navy-light); }
+
+.btn-danger { background: var(--white); color: var(--red); border-color: var(--red); }
+
+.nav-links a.btn-primary,
+.nav-links a.btn-primary:hover {
+  color: var(--white);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ---------- Cards, notices, messages ---------- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.notice {
+  background: var(--saffron-light);
+  color: #7a4a05;
+  border-left: 4px solid var(--saffron);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.925rem;
+}
+
+.notice a {
+  color: inherit;
+}
+
+.badge {
+  background: var(--saffron);
+  color: var(--navy);
+  border-radius: 999px;
+  padding: 0.1rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+.flash-stack {
+  padding-top: 1rem;
+}
+
+.flash {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.flash-success { background: #dff5e6; color: var(--green); }
+.flash-error { background: #fde8e4; color: var(--red); }
+.flash-info { background: var(--navy-light); color: var(--navy); }
+
+code {
+  background: var(--navy-light);
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.875em;
+}
+
+/* ---------- Forms ---------- */
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.925rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+select,
+textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--white);
+  border: 1px solid #b4c1d3;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--teal);
+  outline: 2px solid var(--teal);
+}
+
+label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.field-error {
+  color: var(--red);
+  font-size: 0.875rem;
+}
+
+.inline-fields {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ---------- Tables ---------- */
+.table-wrap {
+  overflow-x: auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table th {
+  background: var(--navy-light);
+  color: var(--navy);
+}
+
+.table td.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table td form {
+  margin: 0;
+}
+
+/* ---------- Numbers and term lists ---------- */
+.big-number {
+  font-family: var(--heading-font);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+.rate {
+  font-family: var(--heading-font);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.rate span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.terms {
+  margin: 0;
+}
+
+.terms div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.terms dt { color: var(--muted); }
+.terms dd { margin: 0; font-weight: 600; text-align: right; }
+
+.stat strong {
+  display: block;
+  font-family: var(--heading-font);
+  font-size: 2rem;
+  color: var(--navy);
+}
+
+.stat span {
+  color: var(--muted);
+}
+
+.plain-list {
+  padding-left: 1.2rem;
+}
+
+.plain-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- Home page ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-copy > * + * {
+  margin-top: 1rem;
+}
+
+.hero-copy h1 {
+  max-width: 14ch;
+}
+
+/* Dark panel with the quick EMI estimate */
+.emi-panel {
+  background: var(--navy);
+  color: #e8eef7;
+  border-radius: 18px;
+  padding: 1.5rem;
+}
+
+.emi-panel h2 {
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.emi-figure {
+  font-family: var(--heading-font);
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin: 0.5rem 0 1rem;
+}
+
+.emi-figure small {
+  font-family: var(--body-font);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #a9bad3;
+}
+
+.emi-panel label {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 400;
+  color: #c7d4e6;
+}
+
+.emi-panel label span {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.emi-panel input[type="range"] {
+  width: 100%;
+  margin: 0.2rem 0 1rem;
+  accent-color: var(--teal-bright);
+}
+
+.emi-panel .small {
+  color: #8fa5c4;
+  margin-top: 1rem;
+}
+
+.emi-totals {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: #c7d4e6;
+}
+
+.emi-totals strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--white);
+}
+
+/* Bar showing how the total splits into principal and interest */
+.split-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--border);
+}
+
+#bar-principal { background: #8fb0dc; }
+#bar-interest { background: var(--teal-bright); }
+
+.card #bar-principal { background: var(--navy); }
+.card #bar-interest { background: var(--teal); }
+
+.type-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--navy);
+}
+
+.type-list a {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+}
+
+.type-list a:hover {
+  background: var(--white);
+}
+
+.type-name {
+  font-family: var(--heading-font);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.type-rate {
+  font-family: var(--heading-font);
+  font-weight: 700;
+  color: var(--teal);
+  min-width: 7ch;
+  text-align: right;
+}
+
+.steps {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+  counter-reset: step;
+}
+
+.steps li {
+  counter-increment: step;
+  border-top: 2px solid var(--navy);
+  padding-top: 0.75rem;
+}
+
+.steps li::before {
+  content: counter(step);
+  display: block;
+  font-family: var(--heading-font);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.steps strong {
+  display: block;
+  color: var(--navy);
+  font-size: 1.1rem;
+}
+
+.steps span {
+  color: var(--muted);
+}
+
+/* ---------- Compare page ---------- */
+.filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem 1.5rem;
+}
+
+.filters-submit {
+  align-self: end;
+}
+
+.results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort select {
+  width: auto;
+}
+
+.results {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* One result: bank and product | rate range | EMI and buttons */
+.result-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr auto;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.result-card.is-best {
+  border-color: var(--saffron);
+  border-left: 5px solid var(--saffron);
+}
+
+.result-bank {
+  color: var(--teal);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.result-card h3 a {
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.result-meta {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Bar showing where this product's rates sit compared with the other banks */
+.range {
+  position: relative;
+  height: 8px;
+  background: var(--navy-light);
+  border-radius: 999px;
+  margin-top: 0.5rem;
+}
+
+.range span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 8px;
+  background: var(--teal);
+  border-radius: 999px;
+}
+
+.is-best .range span {
+  background: var(--saffron);
+}
+
+.result-side {
+  text-align: right;
+}
+
+.result-emi {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-emi strong {
+  display: block;
+  font-family: var(--heading-font);
+  font-size: 1.3rem;
+  color: var(--navy);
+}
+
+.result-foot {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ---------- Analytics page ---------- */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.stat-tile {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 0.925rem;
+}
+
+.stat-tile strong {
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 1rem;
+}
+
+.chart-card h3 {
+  margin-bottom: 0.15rem;
+}
+
+/* Chart.js needs a box with a set height to draw into */
+.chart-box {
+  position: relative;
+  height: 300px;
+  margin-top: 1rem;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 800px) {
+  .nav-toggle {
+    display: inline-block;
+  }
+
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .hero,
+  .two-columns,
+  .form-grid,
+  .result-card {
+    grid-template-columns: 1fr;
+  }
+
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .result-side {
+    text-align: left;
+  }
+
+  .type-list a {
+    grid-template-columns: 1fr auto;
+  }
+
+  .type-list a .muted {
+    display: none;
+  }
+
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+}
+
+@media (max-width: 520px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}

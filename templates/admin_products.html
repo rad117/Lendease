@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Loan products{% endblock %}
+{% block content %}
+<section class="stack">
+  <p><a href="{{ url_for('admin_dashboard') }}">← Admin</a></p>
+  <div class="results-bar">
+    <h1>Loan products</h1>
+    <a class="btn btn-primary" href="{{ url_for('admin_product_new') }}">Add product</a>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Bank</th><th>Type</th><th>Product</th><th>Rate</th><th>Fee</th><th>Updated</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+          <tr>
+            <td>{{ p.bank_name }}</td>
+            <td>{{ p.loan_type }}</td>
+            <td>{{ p.product_name }}</td>
+            <td>{{ p.min_interest_rate }}% to {{ p.max_interest_rate }}%</td>
+            <td>{{ p.processing_fee_percent }}%</td>
+            <td>{{ p.last_updated.strftime('%d %b %Y') }}</td>
+            <td>{{ 'Active' if p.is_active else 'Hidden' }}</td>
+            <td class="actions">
+              <a class="btn btn-secondary btn-sm" href="{{ url_for('admin_product_edit', product_id=p.product_id) }}">Edit</a>
+              <form method="post" action="{{ url_for('admin_product_delete', product_id=p.product_id) }}"
+                    data-confirm="Delete {{ p.product_name }}? Saved offers pointing at it will also be removed.">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

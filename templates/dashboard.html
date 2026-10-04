@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}My dashboard{% endblock %}
+{% block content %}
+<section class="stack">
+  <h1>Hello, {{ current_user_name }}</h1>
+
+  <h2>Saved offers</h2>
+  {% if saved %}
+    <div class="card-grid">
+      {% for s in saved %}
+        <article class="card stack" data-saved-card>
+          <p class="eyebrow">{{ s.bank_name }}, {{ s.loan_type }}</p>
+          <h3><a href="{{ url_for('loan_detail', product_id=s.product_id) }}">{{ s.product_name }}</a></h3>
+          <p class="rate">{{ s.min_interest_rate }}%<span> to {{ s.max_interest_rate }}%</span></p>
+          <p class="muted small">Processing fee {{ s.processing_fee_percent }}%. Reference data updated {{ s.last_updated.strftime('%d %b %Y') }}.</p>
+          <button type="button" class="btn btn-ghost btn-sm" data-save-offer="{{ s.product_id }}" data-saved="true" data-remove-card="true">Remove</button>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">Nothing saved yet. <a href="{{ url_for('compare') }}">Compare loans</a> and save the ones you like.</p>
+  {% endif %}
+
+  <h2>Recent comparisons</h2>
+  {% if history %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>Loan type</th><th>Amount</th><th>Tenure</th><th>Best rate now</th><th>Searched</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for h in history %}
+            <tr>
+              <td>{{ h.loan_type }}</td>
+              <td>{{ h.amount|inr }}</td>
+              <td>{{ h.tenure_months|tenure }}</td>
+              <td>{% if h.best_rate_now is not none %}{{ h.best_rate_now }}%{% else %}no match{% endif %}</td>
+              <td>{{ h.searched_at.strftime('%d %b %Y, %H:%M') }}</td>
+              <td>
+                <form method="post" action="{{ url_for('rerun', history_id=h.history_id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button class="btn btn-secondary btn-sm" type="submit">Run again</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No comparisons yet. Enter an amount and tenure on the compare page and they will be listed here.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}{{ p.bank_name }} {{ p.loan_type }}{% endblock %}
+{% block content %}
+<section class="stack" id="loan-detail" data-min-rate="{{ p.min_interest_rate }}" data-max-rate="{{ p.max_interest_rate }}">
+  <p><a href="{{ url_for('compare', loan_type=p.loan_type) }}">← Back to {{ p.loan_type }} comparison</a></p>
+  <p class="eyebrow">{{ p.bank_name }}, {{ p.loan_type }}</p>
+  <h1>{{ p.product_name }}</h1>
+  <p class="rate">{{ p.min_interest_rate }}%<span> to {{ p.max_interest_rate }}% a year</span></p>
+
+  <p class="notice">
+    <strong>Reference data, not a live offer.</strong> Last updated {{ p.last_updated.strftime('%d %b %Y') }}.
+    Source: <a href="{{ p.source_url }}" target="_blank" rel="noopener noreferrer">{{ p.source_url }}</a>.
+    Confirm current terms with the bank before applying.
+  </p>
+
+  <div class="two-columns">
+    <div class="card stack">
+      <h2>Key terms</h2>
+      <dl class="terms">
+        <div><dt>Interest rate</dt><dd>{{ p.min_interest_rate }}% to {{ p.max_interest_rate }}% a year</dd></div>
+        <div><dt>Loan amount</dt><dd>{{ p.min_amount|inr }} to {{ p.max_amount|inr }}</dd></div>
+        <div><dt>Tenure</dt><dd>{{ p.min_tenure_months|tenure }} to {{ p.max_tenure_months|tenure }}</dd></div>
+        <div><dt>Processing fee</dt><dd>{{ p.processing_fee_percent }}%{% if p.processing_fee_flat and p.processing_fee_flat > 0 %} + {{ p.processing_fee_flat|inr }}{% endif %}</dd></div>
+      </dl>
+      {% if p.eligibility_criteria %}
+        <h3>Eligibility (indicative)</h3>
+        <p>{{ p.eligibility_criteria }}</p>
+      {% endif %}
+      <div>
+        {% if is_logged_in %}
+          <button type="button" class="btn {{ 'btn-secondary' if saved else 'btn-primary' }}"
+                  data-save-offer="{{ p.product_id }}" data-saved="{{ 'true' if saved else 'false' }}">
+            {{ 'Saved ✓ (click to remove)' if saved else 'Save this offer' }}
+          </button>
+        {% else %}
+          <a class="btn btn-primary" href="{{ url_for('login', next=request.path) }}">Log in to save</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card form stack">
+      <h2>EMI preview</h2>
+      <label for="detail-amount">Amount (₹)</label>
+      <input id="detail-amount" type="number" min="{{ p.min_amount|int }}" max="{{ p.max_amount|int }}" step="1000"
+             value="{{ [[3000000, p.min_amount|int]|max, p.max_amount|int]|min }}">
+      <label for="detail-tenure">Tenure (months)</label>
+      <input id="detail-tenure" type="number" min="{{ p.min_tenure_months }}" max="{{ p.max_tenure_months }}" step="1"
+             value="{{ [[60, p.min_tenure_months]|max, p.max_tenure_months]|min }}">
+      <p class="muted small">Estimated EMI at the starting rate and at the top of the range:</p>
+      <p id="detail-emi" class="big-number">-</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

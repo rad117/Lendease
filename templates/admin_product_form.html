@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit loan product' if product else 'Add loan product' }}{% endblock %}
+{% block content %}
+<section class="narrow-wide stack">
+  <p><a href="{{ url_for('admin_products') }}">← Loan products</a></p>
+  <h1>{{ 'Edit loan product' if product else 'Add loan product' }}</h1>
+
+  <form method="post" class="card form stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="form-grid">
+      <div>
+        <label for="bank_id">Bank</label>
+        <select id="bank_id" name="bank_id" required>
+          <option value="">Choose…</option>
+          {% for b in banks %}
+            <option value="{{ b.bank_id }}" {{ 'selected' if form.get('bank_id')|string == b.bank_id|string }}>{{ b.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="loan_type">Loan type</label>
+        <select id="loan_type" name="loan_type" required>
+          {% for t in LOAN_TYPES %}
+            <option value="{{ t }}" {{ 'selected' if form.get('loan_type') == t }}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <label for="product_name">Product name</label>
+    <input id="product_name" name="product_name" type="text" maxlength="120" value="{{ form.get('product_name', '') }}" required>
+
+    <div class="form-grid">
+      <div>
+        <label for="min_interest_rate">Min interest rate (%)</label>
+        <input id="min_interest_rate" name="min_interest_rate" type="number" step="0.01" min="0" value="{{ form.get('min_interest_rate', '') }}" required>
+      </div>
+      <div>
+        <label for="max_interest_rate">Max interest rate (%)</label>
+        <input id="max_interest_rate" name="max_interest_rate" type="number" step="0.01" min="0" value="{{ form.get('max_interest_rate', '') }}" required>
+      </div>
+      <div>
+        <label for="min_amount">Min amount (₹)</label>
+        <input id="min_amount" name="min_amount" type="number" step="1" min="1" value="{{ form.get('min_amount', '')|string|replace('.00', '') }}" required>
+      </div>
+      <div>
+        <label for="max_amount">Max amount (₹)</label>
+        <input id="max_amount" name="max_amount" type="number" step="1" min="1" value="{{ form.get('max_amount', '')|string|replace('.00', '') }}" required>
+      </div>
+      <div>
+        <label for="min_tenure_months">Min tenure (months)</label>
+        <input id="min_tenure_months" name="min_tenure_months" type="number" step="1" min="1" value="{{ form.get('min_tenure_months', '') }}" required>
+      </div>
+      <div>
+        <label for="max_tenure_months">Max tenure (months)</label>
+        <input id="max_tenure_months" name="max_tenure_months" type="number" step="1" min="1" value="{{ form.get('max_tenure_months', '') }}" required>
+      </div>
+      <div>
+        <label for="processing_fee_percent">Processing fee (%)</label>
+        <input id="processing_fee_percent" name="processing_fee_percent" type="number" step="0.01" min="0" value="{{ form.get('processing_fee_percent', '0') }}" required>
+      </div>
+      <div>
+        <label for="processing_fee_flat">Flat processing fee (₹)</label>
+        <input id="processing_fee_flat" name="processing_fee_flat" type="number" step="0.01" min="0" value="{{ form.get('processing_fee_flat', '0') }}" required>
+      </div>
+    </div>
+
+    <label for="eligibility_criteria">Eligibility (indicative)</label>
+    <textarea id="eligibility_criteria" name="eligibility_criteria" rows="3">{{ form.get('eligibility_criteria') or '' }}</textarea>
+
+    <label for="source_url">Source URL (where this data came from, required)</label>
+    <input id="source_url" name="source_url" type="url" maxlength="255" value="{{ form.get('source_url', '') }}" required placeholder="https://">
+
+    {% if product %}
+      <label for="change_note">Change note (saved to rate history if rates or fee change)</label>
+      <input id="change_note" name="change_note" type="text" maxlength="255" value="{{ form.get('change_note', '') }}">
+    {% endif %}
+
+    <label class="checkbox"><input type="checkbox" name="is_active" value="1" {{ 'checked' if form.get('is_active') }}> Show in comparisons</label>
+
+    <button class="btn btn-primary" type="submit">Save product</button>
+  </form>
+</section>
+{% endblock %}

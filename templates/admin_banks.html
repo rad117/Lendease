@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Banks{% endblock %}
+{% block content %}
+<section class="stack">
+  <p><a href="{{ url_for('admin_dashboard') }}">← Admin</a></p>
+  <div class="results-bar">
+    <h1>Banks</h1>
+    <a class="btn btn-primary" href="{{ url_for('admin_bank_new') }}">Add bank</a>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Name</th><th>Short</th><th>Website</th><th>Products</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for b in banks %}
+          <tr>
+            <td>{{ b.name }}</td>
+            <td>{{ b.short_name }}</td>
+            <td>{% if b.website_url %}<a href="{{ b.website_url }}" target="_blank" rel="noopener noreferrer">{{ b.website_url }}</a>{% endif %}</td>
+            <td>{{ b.product_count }}</td>
+            <td class="actions">
+              <a class="btn btn-secondary btn-sm" href="{{ url_for('admin_bank_edit', bank_id=b.bank_id) }}">Edit</a>
+              <form method="post" action="{{ url_for('admin_bank_delete', bank_id=b.bank_id) }}"
+                    data-confirm="Delete {{ b.name }} and its {{ b.product_count }} loan product(s)? This cannot be undone.">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

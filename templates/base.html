@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% block title %}LendEase{% endblock %} · LendEase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-logged-in="{{ 'true' if is_logged_in else 'false' }}">
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="{{ url_for('home') }}">Lend<span>Ease</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <nav id="nav-links" class="nav-links">
+        <a href="{{ url_for('compare') }}">Compare loans</a>
+        <a href="{{ url_for('emi_calculator') }}">EMI calculator</a>
+        <a href="{{ url_for('analytics') }}">Analytics</a>
+        {% if is_logged_in %}
+          <a href="{{ url_for('dashboard') }}">My dashboard</a>
+          {% if is_admin %}<a href="{{ url_for('admin_dashboard') }}">Admin</a>{% endif %}
+          <form method="post" action="{{ url_for('logout') }}" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-ghost btn-sm">Log out ({{ current_user_name }})</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('login') }}">Log in</a>
+          <a class="btn btn-primary btn-sm" href="{{ url_for('register') }}">Sign up</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="disclaimer"><strong>Important:</strong> {{ DISCLAIMER }}</p>
+      <p class="muted small">LendEase, a college project. Rates shown are demo reference data.</p>
+    </div>
+  </footer>
+
+  {% block libraries %}{% endblock %}
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

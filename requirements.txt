@@ -1,0 +1,4 @@
+Flask~=3.0
+PyMySQL~=1.1
+cryptography>=42.0   # needed by PyMySQL for MySQL 8 caching_sha2_password auth
+python-dotenv~=1.0

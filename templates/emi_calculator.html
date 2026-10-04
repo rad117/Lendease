@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}EMI calculator{% endblock %}
+{% block content %}
+<section class="stack">
+  <h1>EMI calculator</h1>
+  <p class="muted">Estimate your monthly instalment. Results update as you type; nothing is sent to a server.</p>
+
+  <div class="two-columns">
+    <form id="emi-form" class="card form stack">
+      <label for="principal">Loan amount (₹)</label>
+      <input id="principal" type="number" min="1" step="1000" value="3000000">
+
+      <label for="rate">Interest rate (% per year)</label>
+      <input id="rate" type="number" min="0" max="40" step="0.05" value="8.5">
+
+      <label for="tenure">Tenure</label>
+      <div class="inline-fields">
+        <input id="tenure" type="number" min="1" step="1" value="20">
+        <select id="tenure-unit" aria-label="Tenure unit">
+          <option value="years" selected>years</option>
+          <option value="months">months</option>
+        </select>
+      </div>
+      <p id="emi-error" class="field-error" hidden>Enter a positive amount and tenure, and a rate of 0 or more.</p>
+    </form>
+
+    <div class="card stack">
+      <p class="muted">Monthly EMI</p>
+      <p id="out-emi" class="big-number">-</p>
+      <dl class="terms">
+        <div><dt>Principal</dt><dd id="out-principal">-</dd></div>
+        <div><dt>Total interest</dt><dd id="out-interest">-</dd></div>
+        <div><dt>Total payable</dt><dd id="out-total">-</dd></div>
+      </dl>
+      <div class="split-bar"><span id="bar-principal"></span><span id="bar-interest"></span></div>
+      <p class="muted small">EMI = P × r × (1+r)ⁿ ÷ ((1+r)ⁿ − 1), where r = yearly rate ÷ 12 ÷ 100 and n = months.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

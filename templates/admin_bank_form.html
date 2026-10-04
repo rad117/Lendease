@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit bank' if bank else 'Add bank' }}{% endblock %}
+{% block content %}
+<section class="narrow stack">
+  <p><a href="{{ url_for('admin_banks') }}">← Banks</a></p>
+  <h1>{{ 'Edit bank' if bank else 'Add bank' }}</h1>
+  <form method="post" class="card form stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="name">Bank name</label>
+    <input id="name" name="name" type="text" maxlength="100" value="{{ form.get('name', '') }}" required>
+    <label for="short_name">Short name</label>
+    <input id="short_name" name="short_name" type="text" maxlength="20" value="{{ form.get('short_name', '') }}" required>
+    <label for="website_url">Website URL</label>
+    <input id="website_url" name="website_url" type="url" maxlength="255" value="{{ form.get('website_url') or '' }}" placeholder="https://">
+    <label for="logo_url">Logo URL (optional)</label>
+    <input id="logo_url" name="logo_url" type="text" maxlength="255" value="{{ form.get('logo_url') or '' }}">
+    <button class="btn btn-primary" type="submit">Save bank</button>
+  </form>
+</section>
+{% endblock %}
